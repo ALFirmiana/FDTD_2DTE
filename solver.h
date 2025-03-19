@@ -1,13 +1,20 @@
+#ifndef SOLVER_H
+#define SOLVER_H
+
 #include "field.h"
 
-class simu
+class Simu
 {
   public:
-    void evol(Field *field);
+    Simu(int nx, int ny, double dx, double dy, double dt);
+    void evol();
 
   private:
-    void evol_inner(int i, int j, Field *field);
+    void evol_inner(int i, int j);
     void evol_boundary();
     void evol_inject();
-    Field *field1, field2;
+    Field field;
+    double const dx, dy, dt;
 };
+
+#endif
