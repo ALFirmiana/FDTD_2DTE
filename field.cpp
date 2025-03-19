@@ -31,6 +31,18 @@ void Field::setEx(int i, int j, double new_Ex)
     Ex[i * ny + j] = new_Ex;
 }
 
+void Field::setEy(int i, int j, double new_Ex)
+{
+    checkBounds(i, j);
+    Ey[i * ny + j] = new_Ex;
+}
+
+void Field::setBz(int i, int j, double new_Ex)
+{
+    checkBounds(i, j);
+    Bz[i * ny + j] = new_Ex;
+}
+
 void Field::checkBounds(int i, int j) const
 {
     if (i < 0 || i >= nx || j < 0 || j >= ny)
