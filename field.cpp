@@ -4,7 +4,8 @@
 #include <stdexcept>
 #include <vector>
 
-Field::Field(int nx, int ny) : nx(nx), ny(ny), Ex(nx * ny, 0.0), Ey(nx * ny, 0.0), Bz(nx * ny, 0.0)
+Field::Field(int nx, int ny)
+    : nx(nx), ny(ny), Ex((nx + 1) * ny, 0.0), Ey(nx * (ny + 1), 0.0), Bz((nx + 1) * (ny + 1), 0.0)
 {
 }
 
@@ -17,13 +18,13 @@ double Field::getEx(int i, int j) const
 double Field::getEy(int i, int j) const
 {
     checkBounds(i, j);
-    return Ey[i * ny + j];
+    return Ey[i * (ny + 1) + j];
 }
 
 double Field::getBz(int i, int j) const
 {
     checkBounds(i, j);
-    return Bz[i * ny + j];
+    return Bz[i * (ny + 1) + j];
 }
 
 void Field::setEx(int i, int j, double new_Ex)
@@ -35,15 +36,16 @@ void Field::setEx(int i, int j, double new_Ex)
 void Field::setEy(int i, int j, double new_Ex)
 {
     checkBounds(i, j);
-    Ey[i * ny + j] = new_Ex;
+    Ey[i * (ny + 1) + j] = new_Ex;
 }
 
 void Field::setBz(int i, int j, double new_Ex)
 {
     checkBounds(i, j);
-    Bz[i * ny + j] = new_Ex;
+    Bz[i * (ny + 1) + j] = new_Ex;
 }
 
+// TODO: need check coordinate
 void Field::checkBounds(int i, int j) const
 {
     if (i < 0 || i >= nx || j < 0 || j >= ny)
