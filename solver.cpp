@@ -8,3 +8,7 @@ Simu::Simu(int nx, int ny, double dx, double dy, double dt) : field(nx, ny), dx(
 void Simu::evol()
 {
 }
+
+void Simu::evol_inner(int i, int j)
+{
+}
