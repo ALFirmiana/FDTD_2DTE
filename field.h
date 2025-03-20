@@ -11,9 +11,11 @@ class Field
     double getEx(int i, int j) const;
     double getEy(int i, int j) const;
     double getBz(int i, int j) const;
+    int getT() const;
     void setEx(int i, int j, double new_Ex);
     void setEy(int i, int j, double new_Ey);
     void setBz(int i, int j, double new_Bz);
+    void push();
     void writeToHDF5(const std::string &filename, double dx, double dy, double dt) const;
 
   private:

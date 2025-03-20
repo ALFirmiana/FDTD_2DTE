@@ -1,5 +1,6 @@
 #include "solver.h"
 #include "field.h"
+#include <cmath>
 
 Simu::Simu(int nx, int ny, double dt, int total_step) : field(nx, ny), dt(dt), total_step(total_step)
 {
@@ -29,4 +30,11 @@ void Simu::evol_Ey(int i, int j)
     double Ey = field.getEy(i, j);
     double Bz_left = field.getBz(i, j), Bz_right = field.getBz(i + 1, j);
     field.setEy(i, j, Ey - dt / dx * (Bz_left - Bz_right));
+}
+
+double Simu::get_inject(int i, int j, int t)
+{
+    // TODO: need to change
+    double omega = 1;
+    return std::sin(omega * t);
 }

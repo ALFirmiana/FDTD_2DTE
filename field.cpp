@@ -1,7 +1,6 @@
 #include "field.h"
 
 #include <H5Cpp.h>
-#include <stdexcept>
 #include <vector>
 
 Field::Field(int nx, int ny)
@@ -11,47 +10,37 @@ Field::Field(int nx, int ny)
 
 double Field::getEx(int i, int j) const
 {
-    checkBounds(i, j);
     return Ex[i * ny + j];
 }
 
 double Field::getEy(int i, int j) const
 {
-    checkBounds(i, j);
     return Ey[i * (ny + 1) + j];
 }
 
 double Field::getBz(int i, int j) const
 {
-    checkBounds(i, j);
     return Bz[i * (ny + 1) + j];
 }
 
 void Field::setEx(int i, int j, double new_Ex)
 {
-    checkBounds(i, j);
     Ex[i * ny + j] = new_Ex;
 }
 
-void Field::setEy(int i, int j, double new_Ex)
+void Field::setEy(int i, int j, double new_Ey)
 {
-    checkBounds(i, j);
-    Ey[i * (ny + 1) + j] = new_Ex;
+    Ey[i * (ny + 1) + j] = new_Ey;
 }
 
-void Field::setBz(int i, int j, double new_Ex)
+void Field::setBz(int i, int j, double new_Bz)
 {
-    checkBounds(i, j);
-    Bz[i * (ny + 1) + j] = new_Ex;
+    Bz[i * (ny + 1) + j] = new_Bz;
 }
 
-// TODO: need check coordinate
-void Field::checkBounds(int i, int j) const
+void Field::push()
 {
-    if (i < 0 || i >= nx || j < 0 || j >= ny)
-    {
-        throw std::out_of_range("Index out of bounds");
-    }
+    t++;
 }
 
 // TODO: generate by deepseek, need to check
