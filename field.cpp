@@ -8,34 +8,37 @@ Field::Field(int nx, int ny)
 {
 }
 
+//Bz设置在格点上，i表示x坐标，j表示y坐标；Bz每行有(nx+1)个元素
+//Ex设置在“y轴”上的半格点上，(i,j)表示物理上的(i,j+1/2)；Ex每行有(nx+1)个元素。
+//Ey设置在“x轴”上的半格点上，(i,j)表示物理上的(i+1/2,j)；Ey每行有nx个元素。
 double Field::getEx(int i, int j) const
 {
-    return Ex[i * ny + j];
+    return Ex[j * (nx + 1) + i];
 }
 
 double Field::getEy(int i, int j) const
 {
-    return Ey[i * (ny + 1) + j];
+    return Ey[j * nx + i];
 }
 
 double Field::getBz(int i, int j) const
 {
-    return Bz[i * (ny + 1) + j];
+    return Bz[j * (nx + 1) + i];
 }
 
 void Field::setEx(int i, int j, double new_Ex)
 {
-    Ex[i * ny + j] = new_Ex;
+    Ex[j * (nx + 1) + i] = new_Ex;
 }
 
 void Field::setEy(int i, int j, double new_Ey)
 {
-    Ey[i * (ny + 1) + j] = new_Ey;
+    Ey[j * nx + i] = new_Ey;
 }
 
 void Field::setBz(int i, int j, double new_Bz)
 {
-    Bz[i * (ny + 1) + j] = new_Bz;
+    Bz[j * (nx + 1) + i] = new_Bz;
 }
 
 void Field::push()
