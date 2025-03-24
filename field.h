@@ -16,7 +16,7 @@ class Field
     void setEy(int i, int j, double new_Ey);
     void setBz(int i, int j, double new_Bz);
     void push();
-    //void writeToHDF5(const std::string &filename, double dx, double dy, double dt) const;
+    void writeToHDF5(const std::string &filename) const;
 
   private:
     const int nx, ny;

@@ -51,37 +51,38 @@ void Field::push()
     t++;
 }
 
-// TODO: generate by deepseek, need to check
-// void Field::writeToHDF5(const std::string &filename, double dx, double dy, double dt) const
-// {
-//     // 创建 HDF5 文件
-//     H5::H5File file(filename, H5F_ACC_TRUNC);
-//
-//     // 创建根组
-//     H5::Group root = file.openGroup("/");
-//
-//     // 写入元数据
-//     H5::Attribute dx_attr = root.createAttribute("dx", H5::PredType::NATIVE_DOUBLE, H5S_SCALAR);
-//     dx_attr.write(H5::PredType::NATIVE_DOUBLE, &dx);
-//
-//     H5::Attribute dy_attr = root.createAttribute("dy", H5::PredType::NATIVE_DOUBLE, H5S_SCALAR);
-//     dy_attr.write(H5::PredType::NATIVE_DOUBLE, &dy);
-//
-//     H5::Attribute dt_attr = root.createAttribute("dt", H5::PredType::NATIVE_DOUBLE, H5S_SCALAR);
-//     dt_attr.write(H5::PredType::NATIVE_DOUBLE, &dt);
-//
-//     // 创建网格数据集
-//     hsize_t dims[2] = {static_cast<hsize_t>(nx), static_cast<hsize_t>(ny)};
-//     H5::DataSpace dataspace(2, dims);
-//
-//     // 写入电场数据
-//     H5::DataSet Ex_dataset = file.createDataSet("/Ex", H5::PredType::NATIVE_DOUBLE, dataspace);
-//     Ex_dataset.write(Ex.data(), H5::PredType::NATIVE_DOUBLE);
-//
-//     // 写入磁场数据
-//     H5::DataSet Bz_dataset = file.createDataSet("/Bz", H5::PredType::NATIVE_DOUBLE, dataspace);
-//     Bz_dataset.write(Bz.data(), H5::PredType::NATIVE_DOUBLE);
-//
-//     // 关闭文件
-//     file.close();
-// }
+void Field::writeToHDF5(const std::string &filename) const
+{
+    // Create or open the HDF5 file
+    H5::H5File file(filename, H5F_ACC_RDWR);
+
+    // Create dataset names using the current time step
+    std::string Ex_name = "/Ex_" + std::to_string(t);
+    std::string Ey_name = "/Ey_" + std::to_string(t);
+    std::string Bz_name = "/Bz_" + std::to_string(t);
+
+    // Define the dataspace for the arrays
+    hsize_t dims_Ex[2] = {static_cast<hsize_t>(ny), static_cast<hsize_t>(nx + 1)};
+    hsize_t dims_Ey[2] = {static_cast<hsize_t>(ny + 1), static_cast<hsize_t>(nx)};
+    hsize_t dims_Bz[2] = {static_cast<hsize_t>(ny + 1), static_cast<hsize_t>(nx + 1)};
+
+    H5::DataSpace dataspace_Ex(2, dims_Ex);
+    H5::DataSpace dataspace_Ey(2, dims_Ey);
+    H5::DataSpace dataspace_Bz(2, dims_Bz);
+
+    // Create datasets and write data
+    H5::DataSet dataset_Ex = file.createDataSet(Ex_name, H5::PredType::NATIVE_DOUBLE, dataspace_Ex);
+    dataset_Ex.write(Ex.data(), H5::PredType::NATIVE_DOUBLE);
+
+    H5::DataSet dataset_Ey = file.createDataSet(Ey_name, H5::PredType::NATIVE_DOUBLE, dataspace_Ey);
+    dataset_Ey.write(Ey.data(), H5::PredType::NATIVE_DOUBLE);
+
+    H5::DataSet dataset_Bz = file.createDataSet(Bz_name, H5::PredType::NATIVE_DOUBLE, dataspace_Bz);
+    dataset_Bz.write(Bz.data(), H5::PredType::NATIVE_DOUBLE);
+
+    // Close resources
+    dataset_Ex.close();
+    dataset_Ey.close();
+    dataset_Bz.close();
+    file.close();
+}
