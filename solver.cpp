@@ -25,15 +25,6 @@ void Simu::evol()
         Bz_right_old[j] = field.getBz(1, j);
     }
 
-    // evol Bz
-    for (int i = 1; i < nx; i++)
-    {
-        for (int j = 1; j < ny; j++)
-        {
-            evol_Bz(i, j);
-        }
-    }
-
     // evol Ex
     for (int i = 0; i < nx + 1; i++)
     {
@@ -49,6 +40,15 @@ void Simu::evol()
         for (int j = 0; j < ny + 1; j++)
         {
             evol_Ey(i, j);
+        }
+    }
+
+    // evol Bz
+    for (int i = 1; i < nx; i++)
+    {
+        for (int j = 1; j < ny; j++)
+        {
+            evol_Bz(i, j);
         }
     }
 
