@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         if (dump_count == dump_num)
         {
             // TODO: simulation.field.writeToHDF5 not implement yet
-            // simulation.field.writeToHDF5(const std::string &filename, double dx, double dy, double dt);
+            // simulation.field.writeToHDF5(const std::string &filename);
             dump_count = 0;
             std::cout << "step " << simulation.field.getT() << " dump done" << std::endl;
         }
