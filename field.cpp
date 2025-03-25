@@ -53,8 +53,29 @@ void Field::push()
 
 void Field::writeToHDF5(const std::string &filename) const
 {
-    // Create or open the HDF5 file
-    H5::H5File file(filename, H5F_ACC_RDWR);
+    // Check if the file exists
+    bool file_exists = false;
+    try
+    {
+        H5::H5File file(filename, H5F_ACC_RDONLY);
+        file_exists = true;
+        file.close();
+    }
+    catch (H5::FileIException &)
+    {
+        file_exists = false;
+    }
+
+    // Open the file in append mode if it exists, otherwise create it
+    H5::H5File file;
+    if (file_exists)
+    {
+        file.openFile(filename, H5F_ACC_RDWR);
+    }
+    else
+    {
+        file = H5::H5File(filename, H5F_ACC_TRUNC);
+    }
 
     // Create dataset names using the current time step
     std::string Ex_name = "/Ex_" + std::to_string(t);
