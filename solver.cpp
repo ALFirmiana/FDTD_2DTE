@@ -4,12 +4,13 @@
 
 #define SQRT2 1.414214
 #define PI 3.1415926
+#define INJECT_DISTANCE 10
 
 Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx, ny), dt(dt), total_step(total_step)
 {
 }
 
-double Simu::get_inject(int i, int j, int t)
+double Simu::get_inject(double i, double j, double t)
 {
     // TODO: need to change
     double omega = 2 * PI;
@@ -18,10 +19,8 @@ double Simu::get_inject(int i, int j, int t)
 
 void Simu::evol()
 {
-    int x0, y0, x1, y1;
-    x0 = y0 = 10;
-    x1 = nx - 10;
-    y1 = ny - 10; // 表示总场边界位置的两个对角点
+    int x0 = INJECT_DISTANCE, y0 = INJECT_DISTANCE, x1 = nx - INJECT_DISTANCE,
+        y1 = nx - INJECT_DISTANCE; // 表示总场边界位置的两个对角点
 
     std::vector<double> Ey_inject_left(y1 - y0 + 1, 0.0),
         Ey_inject_right(y1 - y0 + 1, 0.0), // 顺序均从下往上，分别用于更新左、右总场边界的Bz值
@@ -34,7 +33,8 @@ void Simu::evol()
 
     for (int j = y0; j < y1 + 1; j++)
     {
-       // Bz_inject_left[j - y0] = get_inject(x0, j, field.getT());
+        Bz_inject_left[j - y0] = get_inject(x0 * dx, j * dy, field.getT() * dt);
+        Ey_inject_left[j - y0] = get_inject(x0 * dx - 0.5 * dx, j * dy, (field.getT() + 0.5) * dt);
     }
 
     std::vector<double> Bz_right_old(ny + 1), Bz_left_old(ny + 1), Bz_up_old(nx + 1), Bz_down_old(nx + 1);
@@ -59,15 +59,15 @@ void Simu::evol()
             evol_Ex(i, j);
         }
     }
-    for (int j = y0; j < y1 + 1; j++)
+    for (int i = x0; i < x1 + 1; i++)
     {
-        // evol_TSBC_Ex_left(j, Bz_inject_right[j - y0]);
-        field.setEx(x0 - 1, j, field.getEx(x0 - 1, j) - (dt / dy) * Bz_inject_right[j - y0]);
+        // evol_TSBC_Ey_down(i, Bz_inject_up[i - x0]);
+        field.setEx(i, y0 - 1, field.getEy(i, y0 - 1) - (dt / dy) * Bz_inject_down[i - x0]);
     }
-    for (int j = y0; j < y1 + 1; j++)
+    for (int i = x0; i < x1 + 1; i++)
     {
-        // evol_TSBC_Ex_right(j, Bz_inject_left[j - y0]);
-        field.setEx(x1, j, field.getEx(x1, j) + (dt / dy) * Bz_inject_left[j - y0]);
+        // evol_TSBC_Ey_up(i, Bz_inject_down[i - x0]);
+        field.setEx(i, y1, field.getEy(i, y1) + (dt / dy) * Bz_inject_up[i - x0]);
     }
 
     // evol Ey
@@ -78,15 +78,15 @@ void Simu::evol()
             evol_Ey(i, j);
         }
     }
-    for (int i = x0; i < x1 + 1; i++)
+    for (int j = y0; j < y1 + 1; j++)
     {
-        // evol_TSBC_Ey_down(i, Bz_inject_up[i - x0]);
-        field.setEy(i, y0 - 1, field.getEy(i, y0 - 1) + (dt / dx) * Bz_inject_up[i - x0]);
+        // evol_TSBC_Ex_left(j, Bz_inject_right[j - y0]);
+        field.setEy(x0 - 1, j, field.getEx(x0 - 1, j) + (dt / dx) * Bz_inject_left[j - y0]);
     }
-    for (int i = x0; i < x1 + 1; i++)
+    for (int j = y0; j < y1 + 1; j++)
     {
-        // evol_TSBC_Ey_up(i, Bz_inject_down[i - x0]);
-        field.setEy(i, y1, field.getEy(i, y1) - (dt / dx) * Bz_inject_down[i - x0]);
+        // evol_TSBC_Ex_right(j, Bz_inject_left[j - y0]);
+        field.setEy(x1, j, field.getEx(x1, j) - (dt / dx) * Bz_inject_right[j - y0]);
     }
 
     // evol Bz
@@ -100,15 +100,15 @@ void Simu::evol()
     // evol_TSBC_Bz_00(Ex_inject_down[0], Ey_inject_left[0]);
     field.setBz(x0, y0, field.getBz(x0, y0) + (dt / dy) * Ex_inject_down[0] - (dt / dx) * Ey_inject_left[0]);
     // evol_TSBC_Bz_01(Ex_inject_down[x1 - x0 + 1], Ey_inject_right[0]);
-    field.setBz(x1, y0, field.getBz(x1, y0) + (dt / dy) * Ex_inject_down[x1 - x0 + 1] + (dt / dx) * Ey_inject_right[0]);
+    field.setBz(x1, y0, field.getBz(x1, y0) + (dt / dy) * Ex_inject_down[x1 - x0] + (dt / dx) * Ey_inject_right[0]);
     // evol_TSBC_Bz_10(Ex_inject_up[0], Ey_inject_left[y1 - y0 + 1]);
-    field.setBz(x0, y1, field.getBz(x0, y1) - (dt / dy) * Ex_inject_up[0] - (dt / dx) * Ey_inject_left[y1 - y0 + 1]);
+    field.setBz(x0, y1, field.getBz(x0, y1) - (dt / dy) * Ex_inject_up[0] - (dt / dx) * Ey_inject_left[y1 - y0]);
     // evol_TSBC_Bz_11(Ex_inject_up[x1 - x0 + 1], Ey_inject_right[y1 - y0 + 1]);
-    field.setBz(x1, y1,
-                field.getBz(x1, y1) - (dt / dy) * Ex_inject_up[x1 - x0 + 1] + (dt / dx) * Ey_inject_right[y1 - y0 + 1]);
+    field.setBz(x1, y1, field.getBz(x1, y1) - (dt / dy) * Ex_inject_up[x1 - x0] + (dt / dx) * Ey_inject_right[y1 - y0]);
 
     for (int i = x0 + 1; i < x1; i++)
-    { // evol_TSBC_Bz_down(i, Ex_inject_down[i - x0]);
+    {
+        // evol_TSBC_Bz_down(i, Ex_inject_down[i - x0]);
         field.setBz(i, y0, field.getBz(i, y0) + (dt / dy) * Ex_inject_down[i - x0]);
         // evol_TSBC_Bz_up(i, Ex_inject_up[i - x0]);
         field.setBz(i, y1, field.getBz(i, y1) - (dt / dy) * Ex_inject_up[i - x0]);
@@ -156,7 +156,7 @@ void Simu::evol_Ey(int i, int j)
 {
     double Ey = field.getEy(i, j);
     double Bz_left = field.getBz(i, j), Bz_right = field.getBz(i + 1, j);
-    field.setEy(i, j, Ey - dt / dx * (Bz_left - Bz_right));
+    field.setEy(i, j, Ey - dt / dx * (Bz_right - Bz_left));
 }
 
 void Simu::evol_boundary_left(int j, double Bz_right_old)

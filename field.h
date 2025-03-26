@@ -17,6 +17,7 @@ class Field
     void setBz(int i, int j, double new_Bz);
     void push();
     void writeToHDF5(const std::string &filename) const;
+    void writeToText(const std::ofstream) const;
 
   private:
     const int nx, ny;

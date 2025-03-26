@@ -1,5 +1,6 @@
 #include "field.h"
 #include "solver.h"
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -8,6 +9,8 @@ int main(int argc, char **argv)
     int dump_num = 10;
     Simu simulation(80, 60, 0.5, 100);
     std::string const output_file = "test.h5";
+    std::ofstream output;
+    output.open(output_file);
     std::cout << "simulation init" << std::endl;
     for (int dump_count = 0; simulation.field.getT() < simulation.total_step; simulation.field.push())
     {
@@ -21,5 +24,6 @@ int main(int argc, char **argv)
             std::cout << "step " << simulation.field.getT() << " dump done" << std::endl;
         }
     }
+    output.close();
     return 0;
 }

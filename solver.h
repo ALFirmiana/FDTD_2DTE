@@ -35,18 +35,17 @@ class Simu
     void evol_TSBC_Bz_right(int j, double Ey_inject_right);
     void evol_TSBC_Bz_up(int i, double Ex_inject_up);
     void evol_TSBC_Bz_down(int i, double Ex_inject_down);
-    void evol_TSBC_Bz_00(double Ex_inject_down, double Ey_inject_left);  //左下边界
-    void evol_TSBC_Bz_01(double Ex_inject_down, double Ey_inject_right); //右下边界
-    void evol_TSBC_Bz_10(double Ex_inject_up, double Ey_inject_left);    //左上边界
-    void evol_TSBC_Bz_11(double Ex_inject_up, double Ey_inject_right);  //右上边界
-
+    void evol_TSBC_Bz_00(double Ex_inject_down, double Ey_inject_left);  // 左下边界
+    void evol_TSBC_Bz_01(double Ex_inject_down, double Ey_inject_right); // 右下边界
+    void evol_TSBC_Bz_10(double Ex_inject_up, double Ey_inject_left);    // 左上边界
+    void evol_TSBC_Bz_11(double Ex_inject_up, double Ey_inject_right);   // 右上边界
 
     void evol_inject_wrong();
 
-    double get_inject(int i, int j, int t);
+    double get_inject(double i, double j, double t);
     double const dt;
-    int const dx = 1, dy = 1; // dx=dy=1 for Default, set this for maintenance
-    int const nx,ny;
+    double const dx = 1.0, dy = 1.0; // dx=dy=1 for Default, set this for maintenance
+    int const nx, ny;
 };
 
 #endif

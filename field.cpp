@@ -1,6 +1,7 @@
 #include "field.h"
 
 #include <H5Cpp.h>
+#include <fstream>
 #include <vector>
 
 Field::Field(int nx, int ny)
@@ -49,6 +50,10 @@ void Field::setBz(int i, int j, double new_Bz)
 void Field::push()
 {
     t++;
+}
+
+void Field::writeToText(const std::ofstream) const
+{
 }
 
 void Field::writeToHDF5(const std::string &filename) const
