@@ -1,8 +1,8 @@
 #include "field.h"
 #include "params.h"
 #include "solver.h"
+#include <cmath>
 #include <iostream>
-#include <math.h>
 
 int main(int argc, char **argv)
 {
@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     simulation.field.writeToText();
     while (simulation.field.getT() < simulation.total_step)
     {
-        //simulation.field.setBz(75, 50, std::sin(simulation.field.getT()));
+        // simulation.field.setBz(75, 50, std::sin(simulation.field.getT()));
         simulation.evol();
         std::cout << "step " << simulation.field.getT() << " done" << std::endl;
 

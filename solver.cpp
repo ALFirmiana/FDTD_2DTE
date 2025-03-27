@@ -10,10 +10,10 @@ Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx
 {
 }
 
-double Simu::get_inject(double i, double j, double t)
+double Simu::get_inject(double x, double y, double t)
 {
     double omega = 0.5 * PI;
-    return std::sin(omega * t);
+    return std::sin(omega * (x - t));
 }
 
 void Simu::evol()
@@ -99,7 +99,7 @@ void Simu::evol_inject()
     for (int j = y0; j < y1 + 1; j++)
     {
         Bz_inject_left[j - y0] = get_inject(x0 * dx, j * dy, field.getT() * dt);
-        Ey_inject_left[j - y0] = get_inject(x0 * dx - 0.5 * dx, j * dy, (field.getT() + 0.5) * dt);
+        Ey_inject_left[j - y0] = get_inject(x0 * dx - 0.5 * dx, j * dy, (field.getT() - 0.5) * dt);
     }
 
     // Ex
@@ -166,8 +166,8 @@ void Simu::evol_boundary_left(int j, double Bz_right_old)
 {
     double Bz = field.getBz(0, j);
     double Bz_right = field.getBz(1, j);
-    double Ex_up = field.getEy(0, j), Ex_down = field.getEy(0, j - 1);
-    double Ex_right_up = field.getEy(1, j), Ex_right_down = field.getEy(1, j - 1);
+    double Ex_up = field.getEx(0, j), Ex_down = field.getEx(0, j - 1);
+    double Ex_right_up = field.getEx(1, j), Ex_right_down = field.getEx(1, j - 1);
     field.setBz(0, j,
                 Bz_right_old + ((dt - dx) / (dt + dx)) * (Bz_right - Bz) +
                     (dx * dt / (2 * dy * (dt + dx))) * (Ex_up + Ex_right_up - Ex_down - Ex_right_down));
@@ -177,8 +177,8 @@ void Simu::evol_boundary_right(int j, double Bz_left_old)
 {
     double Bz = field.getBz(nx, j);
     double Bz_left = field.getBz(nx - 1, j);
-    double Ex_up = field.getEy(nx, j), Ex_down = field.getEy(nx, j - 1);
-    double Ex_left_up = field.getEy(nx - 1, j), Ex_left_down = field.getEy(nx - 1, j - 1);
+    double Ex_up = field.getEx(nx, j), Ex_down = field.getEx(nx, j - 1);
+    double Ex_left_up = field.getEx(nx - 1, j), Ex_left_down = field.getEx(nx - 1, j - 1);
     field.setBz(nx, j,
                 Bz_left_old + ((dt - dx) / (dt + dx)) * (Bz_left - Bz) +
                     (dx * dt / (2 * dy * (dt + dx))) * (Ex_up + Ex_left_up - Ex_down - Ex_left_down));
@@ -188,22 +188,22 @@ void Simu::evol_boundary_up(int i, double Bz_down_old)
 {
     double Bz = field.getBz(i, ny);
     double Bz_down = field.getBz(i, ny - 1);
-    double Ex_left = field.getEy(i - 1, ny), Ex_right = field.getEy(i, ny);
-    double Ex_down_left = field.getEy(i - 1, ny - 1), Ex_down_right = field.getEy(i, ny - 1);
+    double Ey_left = field.getEy(i - 1, ny), Ey_right = field.getEy(i, ny);
+    double Ey_down_left = field.getEy(i - 1, ny - 1), Ey_down_right = field.getEy(i, ny - 1);
     field.setBz(i, ny,
                 Bz_down_old + ((dt - dy) / (dt + dy)) * (Bz_down - Bz) +
-                    (dy * dt / (2 * dx * (dt + dy))) * (Ex_left + Ex_down_left - Ex_right - Ex_down_right));
+                    (dy * dt / (2 * dx * (dt + dy))) * (Ey_left + Ey_down_left - Ey_right - Ey_down_right));
 }
 
 void Simu::evol_boundary_down(int i, double Bz_up_old)
 {
     double Bz = field.getBz(i, 0);
     double Bz_up = field.getBz(i, 1);
-    double Ex_left = field.getEy(i - 1, 0), Ex_right = field.getEy(i, 0);
-    double Ex_up_left = field.getEy(i - 1, 1), Ex_up_right = field.getEy(i, 1);
+    double Ey_left = field.getEy(i - 1, 0), Ey_right = field.getEy(i, 0);
+    double Ey_up_left = field.getEy(i - 1, 1), Ey_up_right = field.getEy(i, 1);
     field.setBz(i, 0,
                 Bz_up_old + ((dt - dy) / (dt + dy)) * (Bz_up - Bz) +
-                    (dy * dt / (2 * dx * (dt + dy))) * (Ex_left + Ex_up_left - Ex_right - Ex_up_right));
+                    (dy * dt / (2 * dx * (dt + dy))) * (Ey_left + Ey_up_left - Ey_right - Ey_up_right));
 }
 
 void Simu::evol_boundary_angle_00(double Bz_right_up_old)

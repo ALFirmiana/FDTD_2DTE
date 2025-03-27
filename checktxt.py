@@ -2,23 +2,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 file_path = "build/"
-# |%%--%%| <1hQv8kKawq|sfh9GANB74>
+# |%%--%%| <1hQv8kKawq|YFcZQ5BtEY>
 
 Bz = []
-for i in range(0, 1001, 10):
+for i in range(0, 101, 1):
     file = file_path + f"Bz_{i}.txt"
     Bz.append(np.loadtxt(file))
-np.shape(Bz)
+print(np.shape(Bz))
+# |%%--%%| <YFcZQ5BtEY|ikW2GcdhZD>
 
-# |%%--%%| <sfh9GANB74|kVRQavqLlQ>
-
-for i in range(0, 102, 10):
+for i in range(30, 40, 10):
     # plt.imshow(Bz[i], vmax=1, vmin=-1)
     plt.imshow(Bz[i], vmax=0.1, vmin=-0.1)
     plt.colorbar()
     plt.show()
 
-# |%%--%%| <kVRQavqLlQ|NuGrbXSxiU>
+# |%%--%%| <ikW2GcdhZD|dAI0a1tWaF>
+
+for t in range(20, 40, 1):
+    print(f"t={t}")
+    tmp = []
+    for j in range(101):
+        if (Bz[t][j][150] != 0):
+            tmp.append(j)
+    print(tmp)
+
+    # |%%--%%| <dAI0a1tWaF|NuGrbXSxiU>
 
 Ex = []
 for i in range(0, 1001, 10):
