@@ -27,19 +27,7 @@ class Simu
     void evol_boundary_angle_10(double Bz_right_down_old);
     void evol_boundary_angle_11(double Bz_left_down_old);
 
-    void evol_TSBC_Ex_left(int j, double Bz_inject_right);
-    void evol_TSBC_Ex_right(int j, double Bz_inject_left);
-    void evol_TSBC_Ey_up(int i, double Bz_inject_down);
-    void evol_TSBC_Ey_down(int i, double Bz_inject_up);
-    void evol_TSBC_Bz_left(int j, double Ey_inject_left);
-    void evol_TSBC_Bz_right(int j, double Ey_inject_right);
-    void evol_TSBC_Bz_up(int i, double Ex_inject_up);
-    void evol_TSBC_Bz_down(int i, double Ex_inject_down);
-    void evol_TSBC_Bz_00(double Ex_inject_down, double Ey_inject_left);  // 左下边界
-    void evol_TSBC_Bz_01(double Ex_inject_down, double Ey_inject_right); // 右下边界
-    void evol_TSBC_Bz_10(double Ex_inject_up, double Ey_inject_left);    // 左上边界
-    void evol_TSBC_Bz_11(double Ex_inject_up, double Ey_inject_right);   // 右上边界
-
+    void evol_inject();
     void evol_inject_wrong();
 
     double get_inject(double i, double j, double t);

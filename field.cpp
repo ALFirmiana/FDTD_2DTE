@@ -2,6 +2,7 @@
 
 #include <H5Cpp.h>
 #include <fstream>
+#include <string>
 #include <vector>
 
 Field::Field(int nx, int ny)
@@ -52,8 +53,41 @@ void Field::push()
     t++;
 }
 
-void Field::writeToText(const std::ofstream) const
+void Field::writeToText() const
 {
+    std::string Ex_name = "Ex_" + std::to_string(t) + ".txt";
+    std::string Ey_name = "Ey_" + std::to_string(t) + ".txt";
+    std::string Bz_name = "Bz_" + std::to_string(t) + ".txt";
+
+    // Write Ex data
+    std::ofstream Ex_file(Ex_name);
+    for (int j = 0; j < ny; ++j) {
+        for (int i = 0; i < nx + 1; ++i) {
+            Ex_file << getEx(i, j) << " ";
+        }
+        Ex_file << "\n";
+    }
+    Ex_file.close();
+
+    // Write Ey data
+    std::ofstream Ey_file(Ey_name);
+    for (int j = 0; j < ny + 1; ++j) {
+        for (int i = 0; i < nx; ++i) {
+            Ey_file << getEy(i, j) << " ";
+        }
+        Ey_file << "\n";
+    }
+    Ey_file.close();
+
+    // Write Bz data
+    std::ofstream Bz_file(Bz_name);
+    for (int j = 0; j < ny + 1; ++j) {
+        for (int i = 0; i < nx + 1; ++i) {
+            Bz_file << getBz(i, j) << " ";
+        }
+        Bz_file << "\n";
+    }
+    Bz_file.close();
 }
 
 void Field::writeToHDF5(const std::string &filename) const
