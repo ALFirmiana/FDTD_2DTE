@@ -13,7 +13,8 @@ Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx
 double Simu::get_inject(double i, double j, double t)
 {
     double omega = 0.5 * PI;
-    return std::sin(omega * t);
+    return 0;
+    //return std::sin(omega * t);
 }
 
 void Simu::evol()
@@ -63,6 +64,7 @@ void Simu::evol()
     // evol injection
     evol_inject();
 
+    // evol boundary
     for (int j = 1; j < ny; j++)
     {
         evol_boundary_left(j, Bz_right_old[j]);
@@ -104,21 +106,21 @@ void Simu::evol_inject()
     // Ex
     for (int i = x0; i < x1 + 1; i++)
     {
-        field.setEx(i, y0 - 1, field.getEy(i, y0 - 1) - (dt / dy) * Bz_inject_down[i - x0]);
+        field.setEx(i, y0 - 1, field.getEx(i, y0 - 1) - (dt / dy) * Bz_inject_down[i - x0]);
     }
     for (int i = x0; i < x1 + 1; i++)
     {
-        field.setEx(i, y1, field.getEy(i, y1) + (dt / dy) * Bz_inject_up[i - x0]);
+        field.setEx(i, y1, field.getEx(i, y1) + (dt / dy) * Bz_inject_up[i - x0]);
     }
 
     // Ey
     for (int j = y0; j < y1 + 1; j++)
     {
-        field.setEy(x0 - 1, j, field.getEx(x0 - 1, j) + (dt / dx) * Bz_inject_left[j - y0]);
+        field.setEy(x0 - 1, j, field.getEy(x0 - 1, j) + (dt / dx) * Bz_inject_left[j - y0]);
     }
     for (int j = y0; j < y1 + 1; j++)
     {
-        field.setEy(x1, j, field.getEx(x1, j) - (dt / dx) * Bz_inject_right[j - y0]);
+        field.setEy(x1, j, field.getEy(x1, j) - (dt / dx) * Bz_inject_right[j - y0]);
     }
 
     // Bz
