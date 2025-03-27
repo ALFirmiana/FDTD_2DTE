@@ -13,8 +13,7 @@ Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx
 double Simu::get_inject(double i, double j, double t)
 {
     double omega = 0.5 * PI;
-    return 0;
-    //return std::sin(omega * t);
+    return std::sin(omega * t);
 }
 
 void Simu::evol()
