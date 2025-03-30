@@ -5,28 +5,22 @@ file_path = "build/"
 # |%%--%%| <1hQv8kKawq|YFcZQ5BtEY>
 
 Bz = []
-for i in range(0, 1001, 10):
+for i in range(0, 2001, 20):
     file = file_path + f"Bz_{i}.txt"
     Bz.append(np.loadtxt(file))
 print(np.shape(Bz))
 # |%%--%%| <YFcZQ5BtEY|ikW2GcdhZD>
 
 for i in range(0, 101, 10):
-    plt.imshow(Bz[i], vmax=1, vmin=-1)
+    plt.imshow(Bz[i])
     plt.colorbar()
     plt.show()
 
 # |%%--%%| <ikW2GcdhZD|dAI0a1tWaF>
 
-for t in range(20, 40, 1):
-    print(f"t={t}")
-    tmp = []
-    for j in range(101):
-        if (Bz[t][j][150] != 0):
-            tmp.append(j)
-    print(tmp)
+plt.plot(Bz[3][150][:])
 
-    # |%%--%%| <dAI0a1tWaF|NuGrbXSxiU>
+# |%%--%%| <dAI0a1tWaF|NuGrbXSxiU>
 
 Ex = []
 for i in range(0, 1001, 10):

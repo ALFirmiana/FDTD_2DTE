@@ -4,17 +4,11 @@
 #include <cmath>
 
 #define SQRT2 1.414214
-#define PI 3.1415926
 
 Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx, ny), dt(dt), total_step(total_step)
 {
 }
 
-double Simu::get_inject(double x, double y, double t)
-{
-    double omega = 0.2 * PI;
-    return std::sin(omega * (x - t));
-}
 
 void Simu::evol()
 {

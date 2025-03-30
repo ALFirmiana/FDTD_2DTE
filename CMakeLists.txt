@@ -23,6 +23,7 @@ set(SOURCES
     FDTD.cpp
     field.cpp
     solver.cpp
+    laser.cpp
 )
 
 # Create executable
