@@ -9,7 +9,6 @@ Simu::Simu(int nx, int ny, double dt, int total_step) : nx(nx), ny(ny), field(nx
 {
 }
 
-
 void Simu::evol()
 {
 

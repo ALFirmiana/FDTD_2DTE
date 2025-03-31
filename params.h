@@ -8,7 +8,8 @@
 #define TOTLE_STEP 2000
 #define DUMP_NUM 20
 
-#define PLANE
-// #define GAUSSIAN
+// #define PLANE
+#define GAUSSIAN
+//#define GAUSSIAN_2
 
 #endif

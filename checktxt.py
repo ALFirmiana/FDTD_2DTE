@@ -18,7 +18,7 @@ for i in range(0, 101, 10):
 
 # |%%--%%| <ikW2GcdhZD|dAI0a1tWaF>
 
-plt.plot(Bz[3][150][:])
+plt.plot(Bz[33][150][:])
 
 # |%%--%%| <dAI0a1tWaF|NuGrbXSxiU>
 
